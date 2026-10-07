@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="The five logging rules behind Silent Bug Hunter — what each one buys you and how the lab maps to it.">
+  <title>Guide — Silent Bug Hunter</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<main id="main" tabindex="-1">
+  <nav aria-label="Primary"><a href="/">Lab</a><a aria-current="page" href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging">Source</a></nav>
+  <header class="hero solo">
+    <div><p class="eyebrow">Guide</p><h1>Five rules that turn logs into telemetry</h1><p class="lede">A silent bug is one that runs without throwing — wrong totals, skipped steps, stale branches. Exceptions can't see it. The only thing that can is a trace of what the code actually did. These are the rules that make a trace worth having.</p></div>
+  </header>
+
+  <section class="guide-section panel"><h2>1. Log the boundary, not the internals</h2>
+    <p>Emit a line when a request enters and leaves a boundary: HTTP handler, queue consumer, external API call. What happens inside a loop is trivia; what crossed the edge is the record. In the lab, the <em>naive</em> lane logs every loop iteration — six orders produce a wall of text where nothing can be found. The <em>disciplined</em> lane emits three lines per order: entry, decision, exit.</p></section>
+
+  <section class="guide-section panel"><h2>2. Log the decision, not just the outcome</h2>
+    <p>Record which branch fired and why: <code>coupon.applied</code> with the code, kind, and the <code>discountCents</code> it produced. Without the decision line, you re-derive intent by re-reading code — the same code that has the bug.</p></section>
+
+  <section class="guide-section panel"><h2>3. Log the failure — and the request — with context</h2>
+    <p>An error line without a <code>requestId</code> is a corpse without a name. The ID joins every line a request emitted into one story, and the logged fields carry enough input to reproduce it. In the lab, the hunter joins lines by <code>requestId</code> and replays the arithmetic — that's the whole detection mechanism.</p></section>
+
+  <section class="guide-section panel"><h2>4. Never log secrets or PII</h2>
+    <p>Logs replicate to vendors, indexes, and dashboards — a wider audience than your database. The naive lane prints the customer email and card fixture; the disciplined lane never touches them. Redact by allowlisting fields at the logger, not by promising to be careful.</p></section>
+
+  <section class="guide-section panel"><h2>5. Structured fields over free text</h2>
+    <p><code>"done total 5310"</code> can't be queried; <code>{"event":"checkout.done","totalCents":5310}</code> can be parsed, joined, recomputed, and alerted on. A log line you can't query isn't telemetry — it's a diary.</p></section>
+
+  <section class="guide-section panel"><h2>How the detection works</h2>
+    <p>The hunter never runs an oracle next to the service. It joins the disciplined lane's lines by <code>requestId</code>: entry says <code>shippingCents: 900</code>, no <code>freeship</code> decision fired, yet exit charges <code>shippingCents: 0</code>. The trace contradicts itself — that's the silent bug, caught by arithmetic on logged fields. The other two modes can't be reconstructed at all: <em>none</em> emits nothing; <em>naive</em> emits text with no ID to join on and no fields to recompute.</p>
+    <p class="muted">Honest limits: the checker knows this service's fields. The rule that generalizes is "log enough structured context to replay what happened" — the specific assertions are demo-sized on purpose.</p>
+    <p><a href="/">Back to the lab</a></p></section>
+</main>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging" title="8-5-quy-tac-vang-logging — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>8-5-quy-tac-vang-logging</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging" title="Back to the article — 8-5-quy-tac-vang-logging">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=8-5-quy-tac-vang-logging';}})();</script><!-- pb-back --></body>
+</html>

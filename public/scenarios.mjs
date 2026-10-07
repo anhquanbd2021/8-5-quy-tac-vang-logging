@@ -1,0 +1,47 @@
+// The replayed workload. Mirrored from examples/orders.json — the fixture
+// sync test keeps the two in lockstep.
+//
+// Cards are the canonical Stripe test number — obviously fake fixtures,
+// not real credentials. The emails are example.com fixtures.
+export const ORDERS = [
+  {
+    id: 'o-1001', shippingCents: 700, coupon: null,
+    customer: { email: 'alice@example.com', card: '4242424242424242' },
+    items: [
+      { name: 'Mug', priceCents: 1200, qty: 2 },
+      { name: 'Sticker pack', priceCents: 350, qty: 1 },
+    ],
+  },
+  {
+    id: 'o-1002', shippingCents: 900, coupon: { code: 'WELCOME10', type: 'percent', pct: 10 },
+    customer: { email: 'bob@example.com', card: '4242424242424242' },
+    items: [{ name: 'Hoodie', priceCents: 5900, qty: 1 }],
+  },
+  {
+    id: 'o-1003', shippingCents: 900, coupon: { code: 'FREESHIP', type: 'freeship' },
+    customer: { email: 'carol@example.com', card: '4242424242424242' },
+    items: [{ name: 'Socks', priceCents: 800, qty: 3 }],
+  },
+  {
+    id: 'o-1004', shippingCents: 1500, coupon: { code: 'VIP25', type: 'percent', pct: 25 },
+    customer: { email: 'dana@example.com', card: '4242424242424242' },
+    items: [
+      { name: 'Keyboard', priceCents: 12900, qty: 1 },
+      { name: 'Wrist rest', priceCents: 2400, qty: 1 },
+    ],
+  },
+  {
+    id: 'o-1005', shippingCents: 0, coupon: { code: 'WELCOME10', type: 'percent', pct: 10 },
+    customer: { email: 'eli@example.com', card: '4242424242424242' },
+    items: [{ name: 'Cable', priceCents: 900, qty: 2 }],
+  },
+  {
+    id: 'o-1006', shippingCents: 500, coupon: null,
+    customer: { email: 'fay@example.com', card: '4242424242424242' },
+    items: [{ name: 'Notebook', priceCents: 1100, qty: 1 }],
+  },
+];
+
+// Defect config fixtures mirrored from examples/service.*.json.
+export const BUGGY_CONFIG = { defect: 'percent-coupon-drops-shipping' };
+export const FIXED_CONFIG = { defect: null };

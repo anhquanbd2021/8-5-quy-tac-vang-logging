@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="One silent checkout defect replayed through three logging modes — only the disciplined trace catches it.">
+  <title>Silent Bug Hunter — logging discipline lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,100..900;1,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap">
+  <link rel="stylesheet" href="/styles.css">
+<!-- pb-shell --><link rel="stylesheet" href="./pb-shell.css"><!-- pb-shell --><!-- pb-back --><link rel="stylesheet" href="./pb-back.css"><!-- pb-back --></head>
+<body>
+<a class="skip-link" href="#main">Skip to main content</a>
+<main id="main" tabindex="-1">
+  <nav aria-label="Primary"><a aria-current="page" href="/">Lab</a><a href="/guide.html">Guide</a><a href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging">Source</a></nav>
+  <header class="hero">
+    <div><p class="eyebrow">Silent Bug Hunter · logging-as-instrumentation</p><h1>200 OK. Wrong total. No exception.</h1><p class="lede">A checkout service ships one silent defect: the percent-coupon path drops shipping from the total. Replay the same workload through three logging modes and watch which trace makes the bug visible — and which one just leaks PII.</p></div>
+    <p class="warning"><strong>Safe educational demo.</strong> Everything runs locally in your browser. The card numbers are test fixtures — the point is that the naive logger leaks them.</p>
+  </header>
+
+  <section class="workspace" aria-label="Hunt controls">
+    <section class="panel controls" aria-labelledby="workload-title">
+      <div><p class="eyebrow">Workload</p><h2 id="workload-title">Six orders, one silent defect</h2></div>
+      <ul id="order-list" class="orders" aria-label="Replayed orders"></ul>
+      <div class="toggles">
+        <label><input type="checkbox" id="defect" checked> silent defect enabled (shipping dropped on percent coupons)</label>
+      </div>
+      <button id="run" type="button">Run the hunt</button>
+      <p class="muted">The hunter reconstructs each request from the log lines alone — exactly what an on-call can do at 3 a.m.</p>
+    </section>
+
+    <section class="panel" aria-labelledby="verdict-title">
+      <div class="section-heading"><div><p class="eyebrow">Verdict</p><h2 id="verdict-title">Which trace catches it?</h2></div><span id="verdict-badge" class="badge" role="status" aria-live="polite">Ready</span></div>
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Scoreboard"><table>
+        <caption class="visually-hidden">Replay results across the three logging modes</caption>
+        <thead><tr><th>Mode</th><th>Lines</th><th>Queryable</th><th>PII leaks</th><th>Reconstructed</th><th>Verdict</th></tr></thead>
+        <tbody id="scoreboard"><tr><td colspan="6" class="muted">Run the hunt to compare modes.</td></tr></tbody>
+      </table></div>
+      <ol id="anomalies" class="results" aria-label="Detected anomalies" tabindex="0"></ol>
+    </section>
+  </section>
+
+  <section class="lanes-section" aria-label="Log lanes">
+    <div class="section-heading"><div><p class="eyebrow">The same six requests, three instrumentations</p><h2>Log lanes</h2></div></div>
+    <div class="lanes">
+      <section class="panel lane" aria-labelledby="lane-none"><div class="section-heading"><h3 id="lane-none">none</h3><span id="stats-none" class="badge">—</span></div><pre id="log-none" class="log" role="group" tabindex="0" aria-label="none mode log output">—</pre></section>
+      <section class="panel lane" aria-labelledby="lane-naive"><div class="section-heading"><h3 id="lane-naive">naive spam</h3><span id="stats-naive" class="badge">—</span></div><pre id="log-naive" class="log" role="group" tabindex="0" aria-label="naive mode log output">—</pre></section>
+      <section class="panel lane" aria-labelledby="lane-disciplined"><div class="section-heading"><h3 id="lane-disciplined">disciplined</h3><span id="stats-disciplined" class="badge">—</span></div><pre id="log-disciplined" class="log" role="group" tabindex="0" aria-label="disciplined mode log output">—</pre></section>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <p><a href="/guide.html">Read the five rules</a> · <a href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging">Inspect source and tests</a></p>
+  </footer>
+</main>
+<script type="module" src="/app.js"></script>
+<!-- pb-shell --><a class="pb-shell" href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging" title="8-5-quy-tac-vang-logging — an Article Playbook demo (view source)"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="2" y="2" width="9" height="9" rx="2" fill="#2dd4bf"/><rect x="13" y="2" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="2" y="13" width="9" height="9" rx="2" fill="#2dd4bf" opacity=".45"/><rect x="13" y="13" width="9" height="9" rx="4.5" fill="#2dd4bf"/></svg><b>8-5-quy-tac-vang-logging</b><i>DEMO</i></a><!-- pb-shell --><!-- pb-back --><a class="pb-back" id="pb-back" href="https://github.com/anhquanbd2021/8-5-quy-tac-vang-logging" title="Back to the article — 8-5-quy-tac-vang-logging">← Article <i>PLAYBOOK</i></a><script>(function(){var a=document.getElementById('pb-back');if(!a)return;var h=location.hostname;if(/^(localhost|127\.0\.0\.1|192\.168\.|10\.|172\.(1[6-9]|2[0-9]|3[01])\.)/.test(h)){a.href='//'+h+':'+(/^(localhost|127\.0\.0\.1)$/.test(h)?'1234':'30082')+'/microsites/article.html?slug=8-5-quy-tac-vang-logging';}})();</script><!-- pb-back --></body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "silent-bug-hunter-demo",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Silent Bug Hunter — replay one silent checkout defect through three logging modes; only the disciplined trace catches it.",
+  "scripts": {
+    "start": "node app/server.js",
+    "report": "node scripts/hunt-report.mjs",
+    "test": "node --test \"test/*.test.mjs\"",
+    "check": "npm test && npm run report"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
